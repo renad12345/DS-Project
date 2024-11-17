@@ -63,6 +63,24 @@ public class App {
 
         //BST
 
+         BST<String, Word> invertedIndexBST = new BST<>();
+
+        for (Document doc : index) {
+            String[] words = doc.getContent().split("\\s+");
+
+            for (String word : words) {
+                if (invertedIndexBST.findKey(word)) {
+                    Word existingWord = invertedIndexBST.retrieve();
+                    existingWord.add_Id(doc.getId());
+                } else {
+                    Word newWord = new Word(word);
+                    newWord.add_Id(doc.getId());
+                    invertedIndexBST.insert(word, newWord);
+                }
+            }
+        } 
+
+
         //menue
 
     
