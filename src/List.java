@@ -9,5 +9,6 @@ public interface List<T>{
     void insert( T e);
     void remove();
     void display();
+    boolean exist(T e);
     }
     
