@@ -33,7 +33,7 @@ public class read {
     }
   }
  
- public void readAllDoc(String FileName){
+ public static void readAllDoc(String FileName){
   String line =null;
   
   try {
@@ -111,9 +111,20 @@ public class read {
 
        return false;
      }
+
+     public void readAllFiles(String stopFile,String docFile){
+      readStopWords(stopFile);
+      readAllDoc(docFile);
+     }
     
     
+<<<<<<< HEAD
     /*public static void main(String[]args){
       readAllDoc("dataset.csv");
       }*/
+=======
+    public static void main(String[]args){
+      readAllFiles("stop.txt","dataset.csv");
+      }
+>>>>>>> e2e4fbe243746a8e127ce3646059349bd366be84
 }

@@ -6,9 +6,10 @@ public class App {
     public static void main(String[] args) throws Exception {
         
         System.out.println("Hello, World!");
+        read read = new read();
 
           //Reading docs. + index
-        LinkedList<Document> index= new LinkedList<Document>();
+       /*  LinkedList<Document> index= new LinkedList<Document>();
 
         String line = null;
         
@@ -81,7 +82,7 @@ public class App {
         } 
 
 
-        //menue
+        //menue*/
 
     
     }

@@ -80,4 +80,17 @@ public class LinkedList <T>{
 
         }
 
+        public Node<T> getCurrent() {
+            return current;
+        }
+
+        public Node<T> find(T data) {
+            current = head;
+
+            while (current!=null) {
+                if(current.data.equals(data))
+                return current;
+            }
+            return current;
+        }
 }

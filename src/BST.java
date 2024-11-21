@@ -131,7 +131,9 @@ public class BSTNode<K extends Comparable<K>,T>{
     return true;
 }
  
-  
+public void add(String w, int id){
+
+}
   
 
 
