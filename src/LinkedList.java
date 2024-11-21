@@ -93,4 +93,9 @@ public class LinkedList <T>{
             }
             return current;
         }
+
+        public boolean contains(String word) {
+          // TODO Auto-generated method stub
+          throw new UnsupportedOperationException("Unimplemented method 'contains'");
+        }
 }

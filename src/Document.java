@@ -6,5 +6,11 @@ public class Document {
   this.id =id;
   this.words=words;
   }
+  public boolean contains(String word) {
+    return words.contains(word);
+}
+public int getId() {
+    return id;
+}
 
 }
