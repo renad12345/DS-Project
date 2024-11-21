@@ -7,7 +7,7 @@ public class read {
     LinkedList<String> stopWords;
   index index1;
   invertedIndex inverted;
-  invertedIndexBST invetredBST;
+  BST invetredBST;
   int num_token=0;
   LinkedList<String> unique = new LinkedList<>();
 
@@ -15,7 +15,7 @@ public class read {
     stopWords = new LinkedList<>();
     index1=new index();
     inverted= new invertedIndex();
-    invetredBST= new invertedIndexBST();
+    invetredBST= new BST();
 
   }
 
@@ -55,12 +55,13 @@ public class read {
      System.out.println("content="+content);
 
      LinkedList<String>WordsInDoc = MakeLinkedList(content,id);
-     index1.addDocument(new Document(id, WordsInDoc,content));
+     index1.addDocument(new Document(id, WordsInDoc));
     }
     }catch(Exception e){
      System.out.println("end of file");
      }
      
+    
      }
 
      public LinkedList<String> MakeLinkedList(String content,int id){
@@ -75,12 +76,15 @@ public class read {
       content =content.replaceAll("-", " ");
       content=content.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
       String[] token =content.split("\\s");
-      token.length= token.length+num_token;
+     // token.length= token.length+num_token;
 
       for(String w : token){
         if(!unique.exist(w)){
+          
+
           unique.insert(w);
         }
+
         if(!existInStopWords(w)){
           WordsInDoc.insert(w);
           inverted.add(w,id);
@@ -92,7 +96,7 @@ public class read {
 
      }
 
-     public boolean existInStopWords(Stirng word){
+     public boolean existInStopWords(String word){
       if(stopWords==null || stopWords.empty())
        return false;
        stopWords.findFirst();
@@ -109,7 +113,7 @@ public class read {
      }
     
     
-    public static void main(String[]args){
+    /*public static void main(String[]args){
       readAllDoc("dataset.csv");
-      }
+      }*/
 }
