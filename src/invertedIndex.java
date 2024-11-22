@@ -248,6 +248,77 @@ public void printAllWordsWithDocIDs() {
     System.out.println(); // Final new line
 }
 
+    
+    public LinkedList<ScoredDocument> rankedSearch(String query){
+
+    String[] termsInQuery= query.toLowerCase().split("\\s+");
+    LinkedList<ScoredDocument> scoredDocs= new LinkedList<>();
+
+    for(int i= 0;i< termsInQuery.length;i++){
+        String term= termsInQuery[i];
+        terms.findFirst();
+        while(!terms.last()){
+            Word word= terms.retrieve();
+            if(word.text.equals(term)){
+                word.doc_IDS.findFirst();
+                while(!word.doc_IDS.last()){
+                    int docId= word.doc_IDS.retrieve();
+                    addScore(scoredDocs, docId, 1.0);
+                    word.doc_IDS.findNext();
+               }
+                addScore(scoredDocs, word.doc_IDS.retrieve(), 1.0);
+                break;
+             }
+            terms.findNext();
+         }
+   }
+
+    return sortScoredDocuments(scoredDocs);
+}
+
+private void addScore(LinkedList<ScoredDocument> scoredDocs, int docId, double score){
+    scoredDocs.findFirst();
+    while(!scoredDocs.last()){
+        ScoredDocument doc= scoredDocs.retrieve();
+        if(doc.getId()== docId){
+            doc.addScore(score);
+            return;
+         }
+        scoredDocs.findNext();
+ }
+    scoredDocs.insert(new ScoredDocument(docId, score));
+}
+
+private LinkedList<ScoredDocument> sortScoredDocuments(LinkedList<ScoredDocument> docs){
+    LinkedList<ScoredDocument> sorted =new LinkedList<>();
+    docs.findFirst();
+
+    while(!docs.empty() && !docs.last()){
+        ScoredDocument doc= docs.retrieve();
+        sorted.findFirst();
+        boolean inserted= false;
+
+        while(!sorted.last()){
+            if (sorted.retrieve().getScore()< doc.getScore()){
+                sorted.insert(doc);
+                inserted = true;
+                break;
+          }
+            sorted.findNext();
+         }
+
+        if(!inserted){
+            sorted.insert(doc);
+        }
+
+        docs.findNext();
+    }
+
+    sorted.insert(docs.retrieve());
+    return sorted;
+}
+
+
 
 
 }
