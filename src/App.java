@@ -1,12 +1,38 @@
 import java.io.File;
-import java.util.LinkedList;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class App {
     public static void main(String[] args) throws Exception {
         
+          String fileName = "test.csv"; // Replace with your actual file name
+        /*try {
+            File file = new File(fileName);
+            if (!file.exists()) {
+                System.out.println("File not found: " + fileName);
+                return;
+            }
+
+            Scanner scan = new Scanner(file);
+            while (scan.hasNextLine()) {
+                String line = scan.nextLine();
+                System.out.println("Read line: " + line);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+
+        }*/
+    
         System.out.println("Hello, World!");
         read read = new read();
+       read.readAllFiles("stop.txt","test.csv");
+
+      // read.inverted.printAllWordsWithDocIDs();
+      LinkedList<Integer> result = read.inverted.booList("health AND sport");
+      
+      if(result != null)
+      System.out.println("Here is result " + result.retrieve());
+
 
           //Reading docs. + index
        /*  LinkedList<Document> index= new LinkedList<Document>();

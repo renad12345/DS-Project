@@ -36,7 +36,7 @@ public class index{
           doc.words.display();
          }
             
-          
+          /* 
        public static void main(String[]args){
         index ind1 = new index();
         LinkedList<String>words= new LinkedList<>();
@@ -54,5 +54,5 @@ public class index{
         
         ind1.diplayDocuments();
    
-        }
+        }*/
        }

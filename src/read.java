@@ -33,9 +33,9 @@ public class read {
     }
   }
  
- public static void readAllDoc(String FileName){
+ public void readAllDoc(String FileName){
   String line =null;
-  
+
   try {
    File file =new File(FileName);
    Scanner scan = new Scanner(file);
@@ -43,12 +43,19 @@ public class read {
    scan.nextLine();
    while(scan.hasNextLine()){
     line = scan.nextLine();
+
+    if (line.trim().isEmpty() || !Character.isDigit(line.trim().charAt(0))) {
+      System.out.println("Empty line found, skipping.");
+      continue;
+  }
     
     if(line.trim().length()<3){
      System.out.println("Empty line found,skipping this line="+line);
-     break;
+     continue;
      }
-     
+
+
+
      String x = line.substring(0,line.indexOf(','));
      int id = Integer.parseInt(x.trim());
      String content = line.substring(line.indexOf(',')+1).trim();
@@ -58,6 +65,7 @@ public class read {
      index1.addDocument(new Document(id, WordsInDoc));
     }
     }catch(Exception e){
+       e.printStackTrace();
      System.out.println("end of file");
      }
      
@@ -72,22 +80,52 @@ public class read {
      }
 
      public void makeIndex_And_InvertedIndex(String content ,LinkedList<String> WordsInDoc ,int id){
+     // System.out.println("content2  "+content);
+
       content = content.replaceAll("\'"," " );
+
       content =content.replaceAll("-", " ");
-      content=content.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+
+
+
+
+
+
+     // content=content.toLowerCase().replaceAll("[^a-zA-Z0-9]", "");
+     content=content.toLowerCase().replaceAll("[^a-zA-Z ]", "");
+
+    
       String[] token =content.split("\\s");
+     
+   
+
+     // String[] token =content.split(" ");
+
      // token.length= token.length+num_token;
 
       for(String w : token){
+        //System.out.println("wordrrrr "+w);
+
         if(!unique.exist(w)){
-          
+         // System.out.println("**add unique1 " + w);
 
           unique.insert(w);
         }
 
+       /*  if(!existInStopWords(w)  && !unique.exist(w) ){
+          System.out.println("**add unique " + w);
+          inverted.add(w);
+        }*/
+
+
+        
+
         if(!existInStopWords(w)){
+         // System.out.println("not stop " + w);
+
           WordsInDoc.insert(w);
-          inverted.add(w,id);
+          inverted.add(w);
+          inverted.index_addID(w,id);
           invetredBST.add(w,id);
 
         }
@@ -116,15 +154,16 @@ public class read {
       readStopWords(stopFile);
       readAllDoc(docFile);
      }
-    
+    /*
     
 <<<<<<< HEAD
     /*public static void main(String[]args){
       readAllDoc("dataset.csv");
-      }*/
+      }
 =======
     public static void main(String[]args){
       readAllFiles("stop.txt","dataset.csv");
       }
 >>>>>>> e2e4fbe243746a8e127ce3646059349bd366be84
+ */
 }

@@ -5,7 +5,15 @@ public class LinkedList <T>{
   public LinkedList(){
    head=current=null;
    }
-   
+
+   public LinkedList(LinkedList L){
+    L.current = head;
+    while (L.current != null) {
+        insert((T)L.current.data);
+    }
+
+    }
+
   public boolean empty(){
     return head==null;}
     
@@ -84,13 +92,24 @@ public class LinkedList <T>{
             return current;
         }
 
-        public Node<T> find(T data) {
+        /*public Node<T> find(T data) {
             current = head;
 
             while (current!=null) {
                 if(current.data.equals(data))
                 return current;
             }
-            return current;
-        }
+            return null;
+        }*/
+        public boolean find(T data) {
+          current = head;
+
+          while (current!=null) {
+              if(current.data.equals(data))
+              return true;
+          }
+          return false;
+      }
+
+        
 }
