@@ -9,7 +9,6 @@ public class invertedIndex {
    }
 
     public void add(String word){
-        boolean found = false;
 
         if(terms.empty()){
         terms.insert(new Word(word));
@@ -52,59 +51,60 @@ while (!terms.last()) {
         terms.retrieve().add_Id(id);}
 
     }
-
-    public LinkedList<Integer> booList(String bool){
-        System.out.println("inside booList method");
-        System.out.println("Received query: " + bool);
+    public LinkedList<Integer> booList(String bool) {
+       // System.out.println("inside booList method");
+       // System.out.println("Received query: " + bool);
     
         // Clean the query string
         String query = bool.toLowerCase();
-        query = query.replaceAll("\'"," ");
+        query = query.replaceAll("\'", " ");
         query = query.replaceAll("-", " ");
         query = query.replaceAll("[^a-zA-Z ]", "");
-        
-        System.out.println("Cleaned query: " + query);
+    
+      //  System.out.println("Cleaned query: " + query);
     
         String[] token = query.split("\\s");
-        System.out.println("Tokenized query: ");
-        for (String word : token) {
-            System.out.println("Token: " + word);
-        }
+      //  System.out.println("Tokenized query: ");
+      //  for (String word : token) {
+       //     System.out.println("Token: " + word);
+       // }
     
         LinkedStack<LinkedList<Integer>> words = new LinkedStack<>();
-        LinkedStack<String> operaters = new LinkedStack<>();
-        
+        LinkedStack<String> operators = new LinkedStack<>();
+    
         // Process each word in the query
         for (String word : token) {
-            System.out.println("Processing word: " + word);
-            
+           // System.out.println("Processing word: " + word);
+    
             if (!(word.equals("and") || word.equals("or"))) {
                 LinkedList<Integer> docIds = retrieve(word);
-                System.out.println("Retrieved docIDs for '" + word + "': " + docIds);
+               // System.out.println("Retrieved docIDs for '" + word + "': " + docIds);
                 words.push(docIds);
             } else { 
-                System.out.println("Operator found: " + word);
-                
-                while (!operaters.empty() && 
-                       ((word.equals("and") && operaters.top().equals("and")) || 
-                        (word.equals("or") && (operaters.top().equals("and") || operaters.top().equals("or"))))) {
+               // System.out.println("Operator found: " + word);
+    
+                // Process operators: handle precedence and apply logic
+                while (!operators.empty() &&
+                    ((word.equals("and") && operators.top().equals("and")) ||
+                     (word.equals("or") && (operators.top().equals("and") || operators.top().equals("or"))))) {
                     LinkedList<Integer> list2 = words.pop();
                     LinkedList<Integer> list1 = words.pop();
-                    words.push(evalute(list1, list2, operaters.pop()));
+                    words.push(evalute(list1, list2, operators.pop()));
                 }
-                operaters.push(word);
+                operators.push(word);
             }
         }
-        
-        while (!operaters.empty()) {
+    
+        // Apply remaining operators
+        while (!operators.empty()) {
             LinkedList<Integer> list2 = words.pop();
             LinkedList<Integer> list1 = words.pop();
-            words.push(evalute(list1, list2, operaters.pop()));
+            words.push(evalute(list1, list2, operators.pop()));
         }
-        
+    
         return words.pop();
-        
     }
+    
     
 
     
@@ -112,12 +112,15 @@ while (!terms.last()) {
 
     public static LinkedList<Integer> evalute(LinkedList<Integer> list1, LinkedList<Integer> list2, String op) {
         LinkedList<Integer> result = new LinkedList<>();
-        System.out.println("Evaluating with operator: " + op);
+       // System.out.println("Evaluating with operator: " + op);
         
         // If "and" operator
         if (op.equals("and")) {
-            System.out.println("List1 before processing: " + list1);
-            System.out.println("List2 before processing: " + list2);
+          //  System.out.println("List1 before processing: " );
+           // list1.display();
+           // System.out.println("List2 before processing: ");
+            //list2.display();
+
     
             if (list1 == null || list2 == null)
                 return result;
@@ -129,19 +132,22 @@ while (!terms.last()) {
             while (!list1.last()) {
                 if (list2.find(list1.retrieve())) {
                     result.insert(list1.retrieve());
-                    System.out.println("Added " + list1.retrieve() + " to result");
+              //      System.out.println("Added " + list1.retrieve() + " to result");
                 }
                 list1.findNext();
             }
     
             if (list2.find(list1.retrieve())) {
                 result.insert(list1.retrieve());
-                System.out.println("Added " + list1.retrieve() + " to result");
+            //    System.out.println("Added " + list1.retrieve() + " to result");
             }
         } else {
             // "or" operator
-            System.out.println("List1 before processing: " + list1);
-            System.out.println("List2 before processing: " + list2);
+          //  System.out.println("List1 before processing: " );
+           // list1.display();
+          //  System.out.println("List2 before processing: " + list2);
+           // list2.display();
+
     
             if (list1.empty()) return list2;
             if (list2.empty()) return list1;
@@ -152,18 +158,22 @@ while (!terms.last()) {
             while (!list2.last()) {
                 if (!result.find(list2.retrieve())) {
                     result.insert(list2.retrieve());
-                    System.out.println("Added " + list2.retrieve() + " to result");
+           //         System.out.println("Added " + list2.retrieve() + " to result");
                 }
                 list2.findNext();
             }
     
             if (!result.find(list2.retrieve())) {
                 result.insert(list2.retrieve());
-                System.out.println("Added " + list2.retrieve() + " to result");
+           //     System.out.println("Added " + list2.retrieve() + " to result");
             }
         }
     
-        System.out.println("Final result after evaluation: " + result);
+        System.out.print("Result: {" );
+        result.display();
+        System.out.print("}" );
+
+
         return result;
     }
     
@@ -178,8 +188,9 @@ public LinkedList<Integer> retrieve(String s){
     terms.findFirst();
         
         while(!terms.last()){
-        if(terms.retrieve().text.equals(s))
-            return terms.retrieve().doc_IDS;
+        if(terms.retrieve().text.equals(s)){
+       // terms.retrieve().doc_IDS.display();
+            return terms.retrieve().doc_IDS;}
 
             terms.findNext();}
 

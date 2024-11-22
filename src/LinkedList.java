@@ -99,17 +99,18 @@ public class LinkedList <T>{
                 if(current.data.equals(data))
                 return current;
             }
-            return null;
+            return current;
         }*/
+
         public boolean find(T data) {
-          current = head;
+            current = head;
 
-          while (current!=null) {
-              if(current.data.equals(data))
-              return true;
-          }
-          return false;
-      }
+            while (current!=null) {
+                if(current.data.equals(data))
+                return true;
+                current = current.next;
+            }
 
-        
+            return false;
+        }
 }
