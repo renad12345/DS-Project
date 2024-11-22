@@ -134,6 +134,91 @@ public class BSTNode<K extends Comparable<K>,T>{
 public void add(String w, int id){
 
 }
+
+    public LinkedList<ScoredDocument> rankedSearch(String query){
+    String[] termsInQuery= query.toLowerCase().split("\\s+");
+    LinkedList<ScoredDocument> scoredDocs= new LinkedList<>();
+
+    for(int i= 0;i< termsInQuery.length;i++){
+        String term= termsInQuery[i];
+        Word word= findInTree(root, term);
+        if(word != null){
+            processWordDocs(word, scoredDocs);
+        }
+  }
+
+     return sortScoredDocuments(scoredDocs);
+}
+
+private Word findInTree(Node root, String term){
+    if(root== null){
+        return null;
+    }
+    if(term.equals(root.word.text)){
+        return root.word;
+    }
+    
+    else if(term.compareTo(root.word.text)< 0){
+        return findInTree(root.left, term);
+    } 
+    
+    else{
+        return findInTree(root.right, term);
+    }
+}
+
+private void processWordDocs(Word word, LinkedList<ScoredDocument> scoredDocs){
+    word.doc_IDS.findFirst();
+    while(!word.doc_IDS.last()){
+        int docId= word.doc_IDS.retrieve();
+        addScore(scoredDocs, docId, 1.0);
+        word.doc_IDS.findNext();
+    }
+    addScore(scoredDocs, word.doc_IDS.retrieve(), 1.0);
+}
+
+private void addScore(LinkedList<ScoredDocument> scoredDocs, int docId, double score){
+    scoredDocs.findFirst();
+    while(!scoredDocs.last()){
+        ScoredDocument doc = scoredDocs.retrieve();
+        if(doc.getId()== docId){
+            doc.addScore(score);
+            return;
+        }
+        scoredDocs.findNext();
+    }
+    scoredDocs.insert(new ScoredDocument(docId, score));
+}
+
+private LinkedList<ScoredDocument> sortScoredDocuments(LinkedList<ScoredDocument> docs){
+    LinkedList<ScoredDocument> sorted= new LinkedList<>();
+    docs.findFirst();
+
+    while(!docs.empty() && !docs.last()){
+        ScoredDocument doc= docs.retrieve();
+        sorted.findFirst();
+        boolean inserted= false;
+
+        while(!sorted.last()){
+             if(sorted.retrieve().getScore()< doc.getScore()){
+                sorted.insert(doc);
+                inserted= true;
+                break;
+              }
+            sorted.findNext();
+         }
+
+        if(!inserted){
+          sorted.insert(doc);
+        }
+
+        docs.findNext();
+    }
+
+    sorted.insert(docs.retrieve());
+    return sorted;
+}
+
   
 
 
